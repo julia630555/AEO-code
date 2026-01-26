@@ -91,3 +91,21 @@ hd_IHEval/safety_labeled_hd.json
 .git/objects/6a/0fbd94c8ff3173a835f628ca194ac8ddf7716a
 .git/objects/b1/tmp_obj_R8Heag
 .git/objects/87/aab65d7a767819a93b9c511b8d5c8035b7c520
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+.pytest_cache/
+.venv
+venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+.agent/

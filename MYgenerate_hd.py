@@ -93,13 +93,20 @@ def extract_hd_hd3_from_answer(
         
     hidden = out.last_hidden_state
 
-    if ans_end <= ans_start:
-        last_vec = hidden[:, -1, :].squeeze(0)
-        mean_vec = hidden.mean(dim=1).squeeze(0)
+    if ans_start > 0:
+        # i_last (hd) is the internal vector of the last token of the input prompt
+        last_vec = hidden[:, ans_start - 1, :].squeeze(0)
     else:
+        # Fallback to last token if prompt is empty (shouldn't happen with standard templates)
+        last_vec = hidden[:, -1, :].squeeze(0)
+
+    if ans_end > ans_start:
+        # i_resp (hd3) is the mean pooling of the internal vectors of the response tokens
         ans_hidden = hidden[:, ans_start:ans_end, :]
-        last_vec = ans_hidden[:, -1, :].squeeze(0)
         mean_vec = ans_hidden.mean(dim=1).squeeze(0)
+    else:
+        # Fallback if no response tokens
+        mean_vec = hidden.mean(dim=1).squeeze(0)
 
     hd = last_vec.detach().float().cpu().tolist()
     hd3 = mean_vec.detach().float().cpu().tolist()

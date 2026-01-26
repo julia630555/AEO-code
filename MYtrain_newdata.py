@@ -133,8 +133,8 @@ def main():
     parser.add_argument("--output_path", type=str, required=True, help="Directory to save the best model.")
     parser.add_argument("--model_name", type=str, default="best_mind_entropy.pt", help="Name of the saved model file.")
     parser.add_argument("--epochs", type=int, default=20)
-    parser.add_argument("--batch_size", type=int, default=16)
-    parser.add_argument("--lr", type=float, default=5e-4)
+    parser.add_argument("--batch_size", type=int, default=64)
+    parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--gpu", type=int, default=0)
     parser.add_argument("--training_split", type=float, default=None, help="Fraction of the total data to use for training/validation (default: all).")
     parser.add_argument("--entropy_weight", type=float, default=1.0, help="Weight for entropy maximization on Violate class.")
@@ -202,7 +202,7 @@ def main():
     print(f"Detected input dimension: {actual_input_size}")
     
     model = EntropyClassifier(input_size=actual_input_size).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-5)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-5)
     
     # 类别权重平衡 (仅在计算 CrossEntropy 时作为辅助)
     labels = [d["label"] for d in train_data]
